@@ -93,7 +93,7 @@ https://www.conduktor.io/kafka/how-to-install-apache-kafka-on-windows-without-zo
 * kafka-topics.sh --bootstrap-server localhost:9092 --describe --topic <name of the topic>			
 * delete a topic: kafka-topics.sh --bootstrap-server localhost:9092 --delete --topic <name of the topic>
 
-###  afka producer:
+###  kafka producer:
 * without any property: kafka-console-producer.sh --bootstrap-server <host:port> --topic <name of the topic>
 * with a property: kafka-console-producer.sh --bootstrap-server <host:port> --topic <name of the topic> --producer-property acks=all
 * with key: kafka-console-producer.sh --bootstrap-server <host:port> --topic first_topic --property parse.key=true --property key.separator=:
