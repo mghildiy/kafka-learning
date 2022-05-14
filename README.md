@@ -117,5 +117,24 @@ https://www.conduktor.io/kafka/how-to-install-apache-kafka-on-windows-without-zo
 * kafka-consumer-groups.sh --bootstrap-server <host:port> --group <group name> --reset-offsets --shift-by <offset amount> --execute [--topic <topic name> OR --all-topics]
 * This would shift current offset by given amount for all partitions this group is reading from.
 
+### Rebalancing
+When we have a group of consumers digesting data from a topic, a given partition is to be consumed by only one consumer
+in the group and also no consumer must be idle. So if a consumer group undergoes a change, like addition or removal of a consumer,
+partitions need to be reassigned. Different rebalancing strategies are available to achieve this. 
+A rebalancing strategy is configured by _**partition.assignment.strategy**_
 
+Default strategy is _**eager rebalancing**_ which pauses consumers for a time, and this is called 'stop the world' event
+as there is no data consumption during that period and consumers are reassigned to partitions. It may result in totally 
+new partition being consumed by a consumer. Config values are:
+- RangeAssignor
+- RoundRobin
+- StickyAssignor
+
+_**Cooperative/Incremental rebalancing**_ avoids temporary suspension of data consumption by reassigning subsets of partitions
+in several incremental iterations. Consumers which are nto part of current reassignment can continue to consume data.
+Config value is CooperativeStickyAssignor.
+
+Static group membership: We can assign _**group.instance.id**_ to a consumer in a consumer group, so that if it is not
+available for some time(but within duration configured by _**session.timeout.ms**_), corresponding partition is not 
+reassigned to any other consumer and when consumer comes back it has same id and so it is reassigned to same partition.
 

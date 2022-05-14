@@ -1,4 +1,4 @@
-package org.mghildiy.kafkas.demos;
+package org.mghildiy.kafka.demos;
 
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerConfig;

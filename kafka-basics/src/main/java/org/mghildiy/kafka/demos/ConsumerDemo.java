@@ -1,4 +1,4 @@
-package org.mghildiy.kafkas.demos;
+package org.mghildiy.kafka.demos;
 
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
