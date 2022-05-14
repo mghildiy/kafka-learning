@@ -49,7 +49,7 @@
 * Exactly once: Message processing and offset commit are part of same transaction(using transational API)
 
 ### Brokers
-* Kafka cluster is a group of kaska servers called brokers
+* Kafka cluster is a group of kafka servers called brokers
 * Clients send connection request + metadata to any one of the broker, called bootstrap broker, and receives back all the information for cluster like list of brokers, topics, partitions
 * Clients can then use this information to connect to any one of the broker it wants
 * Each partition is replicated number of times decided by replication factor, thus providing availability and resiliency against failures of partitions
@@ -116,4 +116,6 @@ https://www.conduktor.io/kafka/how-to-install-apache-kafka-on-windows-without-zo
 * This would reset the current offset to 0 for all partitions this group is reading from.
 * kafka-consumer-groups.sh --bootstrap-server <host:port> --group <group name> --reset-offsets --shift-by <offset amount> --execute [--topic <topic name> OR --all-topics]
 * This would shift current offset by given amount for all partitions this group is reading from.
+
+
 
