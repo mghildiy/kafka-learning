@@ -45,8 +45,8 @@
 * At least once: Consumer processes message and only then commits offset. So if failure happens during processing, 
   then consumer reads same message again.
 * So its important that processing is idompotent so that multiple processing of same message doesnt impact system adversely
-* At most once: Consumer commits offset as soon as it arrivees, so if processing results in consumer failure the message is lost
-* Exactly once: Message processing and offset commit are part of same transaction(using transational API)
+* At most once: Consumer commits offset as soon as it arrives, so if processing results in consumer failure the message is lost
+* Exactly once: Message processing and offset commit are part of same transaction(using transactional API)
 
 ### Brokers
 * Kafka cluster is a group of kafka servers called brokers
@@ -131,10 +131,40 @@ new partition being consumed by a consumer. Config values are:
 - StickyAssignor
 
 _**Cooperative/Incremental rebalancing**_ avoids temporary suspension of data consumption by reassigning subsets of partitions
-in several incremental iterations. Consumers which are nto part of current reassignment can continue to consume data.
+in several incremental iterations. Consumers which are not part of current reassignment can continue to consume data.
 Config value is CooperativeStickyAssignor.
 
 Static group membership: We can assign _**group.instance.id**_ to a consumer in a consumer group, so that if it is not
 available for some time(but within duration configured by _**session.timeout.ms**_), corresponding partition is not 
 reassigned to any other consumer and when consumer comes back it has same id and so it is reassigned to same partition.
+
+### Kafka producer defaults for safety
+To ensure good guarantees of data persistence, a combination of following config parameters must be taken into account:
+- acks
+- delivery.timeout.ms
+- enable.idempotence
+- max.in.flight.requests.per.connection
+- retries
+
+Since 3.0, Kafka producer has following defaults to ensure better data durability:
+- acks = all (-1)
+- delivery.timeout.ms=120000, so producer client would keep retrying in case of a failure within this time window
+- enable.idempotence=true, so broker would identify if it's a duplicate request, would not process it and send back ack
+- max.in.flight.requests.per.connection=5
+- retries=Integer.MAX
+- min.insync.replicas(topic level configuration)
+
+### Configuring batching
+- linger.ms(default is 0): time to wait before sending messages to a partition
+- batch.size(default is 16kb): maz data amount before messages are send to a partition
+- whenever any of these 2 is first met, messages are dispatched to partition
+
+### Consumer read semantics
+Three read semantics for kafka consumer can be achieved as:
+- At-most once: enable.auto.commit=true, auto.commit.interval.ms to lower value
+- At-least once: enable.auto.commit=true, auto.commit.interval.ms to higher value OR 
+  enable.auto.commit=false and call consumer.commitSync/consumer.commitAsync at end of processing the records batch
+
+### Aiven
+https://help.aiven.io/en/articles/5344053-java-examples-for-testing-aiven-for-apache-kafka
 
