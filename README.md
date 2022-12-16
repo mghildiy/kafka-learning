@@ -168,3 +168,6 @@ Three read semantics for kafka consumer can be achieved as:
 ### Aiven
 https://help.aiven.io/en/articles/5344053-java-examples-for-testing-aiven-for-apache-kafka
 
+### Kafka Connect
+
+
